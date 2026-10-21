@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive AWS VPC Architecture Visual Lab">
+  <title>VPC Architecture Visual Lab</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><span class="brand-mark">V</span><div><strong>Cloud Visual Lab</strong><small>AWS NETWORKING</small></div></div>
+      <div class="side-label">LEARNING PATH</div>
+      <nav id="topicNav" aria-label="VPC topics"></nav>
+      <div class="side-bottom">
+        <div class="status-dot"></div><span>Interactive demo</span>
+        <button id="themeBtn" class="theme-btn" aria-label="Toggle theme">◐ Theme</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><div class="eyebrow">AWS • NETWORK ARCHITECTURE</div><h1>VPC Architecture <span>Visual Lab</span></h1></div>
+        <div class="top-actions"><span class="pill"><i></i> LEARN BY EXPLORING</span><button id="resetBtn" class="outline-btn">↻ Reset view</button></div>
+      </header>
+
+      <section class="hero">
+        <div><div class="eyebrow">YOUR CLOUD NETWORK, EXPLAINED</div><h2>Build a network you can <em>understand.</em></h2>
+          <p>Explore how AWS networking components connect, isolate workloads, and route traffic in a production-style three-tier architecture.</p>
+          <div class="hero-tags"><span>01 · Design</span><span>02 · Secure</span><span>03 · Connect</span></div>
+        </div>
+        <div class="hero-art" aria-hidden="true"><div class="orbit orbit-one"></div><div class="orbit orbit-two"></div><div class="cloud-icon">☁</div><div class="mini-node n1">VPC</div><div class="mini-node n2">AZ</div><div class="mini-node n3">EC2</div></div>
+      </section>
+
+      <section class="workspace">
+        <div class="panel diagram-panel">
+          <div class="panel-head"><div><span class="section-kicker">NETWORK MAP</span><h3 id="diagramTitle">A highly available VPC</h3></div><div class="panel-tools"><button id="zoomOut" title="Zoom out">−</button><button id="zoomIn" title="Zoom in">+</button><button id="fitBtn" title="Fit diagram">Fit</button></div></div>
+          <div class="diagram-wrap" id="diagramWrap">
+            <svg id="architecture" viewBox="0 0 1000 600" role="img" aria-label="AWS VPC architecture diagram">
+              <defs>
+                <linearGradient id="vpcFill" x1="0" x2="1"><stop offset="0" stop-color="#102b45"/><stop offset="1" stop-color="#11233b"/></linearGradient>
+                <linearGradient id="pubFill" x1="0" x2="1"><stop offset="0" stop-color="#153a35"/><stop offset="1" stop-color="#16312f"/></linearGradient>
+                <linearGradient id="privFill" x1="0" x2="1"><stop offset="0" stop-color="#242d4c"/><stop offset="1" stop-color="#202640"/></linearGradient>
+                <filter id="glow"><feGaussianBlur stdDeviation="3" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+              </defs>
+              <g id="diagramContent">
+                <rect x="20" y="18" width="960" height="78" rx="16" class="external-box"/>
+                <text x="42" y="46" class="tiny-label">CLIENT TRAFFIC</text>
+                <g class="node" data-node="users"><rect x="55" y="54" width="145" height="29" rx="8"/><text x="127" y="73" text-anchor="middle">Users / Browser</text></g>
+                <path d="M205 68 H325" class="flow-line" marker-end="url(#arrowBlue)"/>
+                <g class="node internet" data-node="internet"><rect x="330" y="48" width="150" height="42" rx="10"/><text x="405" y="65" text-anchor="middle">Internet</text><text x="405" y="80" text-anchor="middle" class="node-sub">Public network</text></g>
+                <path d="M485 68 H610 V120" class="flow-line" marker-end="url(#arrowBlue)"/>
+                <rect x="22" y="120" width="956" height="455" rx="18" class="vpc-box"/>
+                <text x="45" y="151" class="vpc-title">AWS VPC · 10.0.0.0/16</text><text x="45" y="171" class="vpc-sub">Isolated virtual network • Example CIDR</text>
+                <rect x="45" y="190" width="438" height="350" rx="14" class="az-box"/>
+                <rect x="517" y="190" width="438" height="350" rx="14" class="az-box"/>
+                <text x="65" y="216" class="az-title">Availability Zone A</text><text x="537" y="216" class="az-title">Availability Zone B</text>
+                <rect x="63" y="232" width="402" height="94" rx="10" class="public-subnet"/>
+                <rect x="535" y="232" width="402" height="94" rx="10" class="public-subnet"/>
+                <text x="78" y="253" class="subnet-label">PUBLIC SUBNET · 10.0.1.0/24</text><text x="550" y="253" class="subnet-label">PUBLIC SUBNET · 10.0.3.0/24</text>
+                <g class="node gateway" data-node="alb"><rect x="173" y="267" width="180" height="45" rx="9"/><text x="263" y="285" text-anchor="middle">Application Load Balancer</text><text x="263" y="300" text-anchor="middle" class="node-sub">Public entry point</text></g>
+                <g class="node gateway" data-node="nat"><rect x="645" y="267" width="180" height="45" rx="9"/><text x="735" y="285" text-anchor="middle">NAT Gateway</text><text x="735" y="300" text-anchor="middle" class="node-sub">Outbound only</text></g>
+                <rect x="63" y="345" width="402" height="174" rx="10" class="private-subnet"/>
+                <rect x="535" y="345" width="402" height="174" rx="10" class="private-subnet"/>
+                <text x="78" y="366" class="subnet-label">PRIVATE APP SUBNET · 10.0.2.0/24</text><text x="550" y="366" class="subnet-label">PRIVATE APP SUBNET · 10.0.4.0/24</text>
+                <g class="node compute" data-node="ec2a"><rect x="108" y="385" width="140" height="62" rx="10"/><text x="178" y="410" text-anchor="middle">EC2 App Server</text><text x="178" y="428" text-anchor="middle" class="node-sub">Auto Scaling</text></g>
+                <g class="node compute" data-node="ec2b"><rect x="580" y="385" width="140" height="62" rx="10"/><text x="650" y="410" text-anchor="middle">EC2 App Server</text><text x="650" y="428" text-anchor="middle" class="node-sub">Auto Scaling</text></g>
+                <g class="node database" data-node="rds"><rect x="300" y="452" width="145" height="48" rx="10"/><text x="372" y="472" text-anchor="middle">Amazon RDS</text><text x="372" y="487" text-anchor="middle" class="node-sub">Private database</text></g>
+                <g class="node database" data-node="rds2"><rect x="772" y="452" width="145" height="48" rx="10"/><text x="844" y="472" text-anchor="middle">RDS Standby</text><text x="844" y="487" text-anchor="middle" class="node-sub">Multi-AZ example</text></g>
+                <path d="M263 312 V333 H178 V385" class="flow-line app-flow" marker-end="url(#arrowGreen)"/>
+                <path d="M263 333 H650 V385" class="flow-line app-flow" marker-end="url(#arrowGreen)"/>
+                <path d="M248 416 H276 V475 H300" class="flow-line db-flow" marker-end="url(#arrowPurple)"/>
+                <path d="M720 416 H748 V475 H772" class="flow-line db-flow" marker-end="url(#arrowPurple)"/>
+                <path d="M735 312 V337 H450 V345" class="flow-line nat-flow" marker-end="url(#arrowOrange)"/>
+                <text x="42" y="562" class="legend-text">Blue: incoming traffic  •  Green: application path  •  Purple: database path  •  Orange: outbound route</text>
+              </g>
+              <defs>
+                <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#56b9ff"/></marker>
+                <marker id="arrowGreen" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#52e0a2"/></marker>
+                <marker id="arrowPurple" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#b9a0ff"/></marker>
+                <marker id="arrowOrange" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#ffb35c"/></marker>
+              </defs>
+            </svg>
+          </div>
+          <div class="diagram-footer"><span><i class="legend blue"></i> Incoming traffic</span><span><i class="legend green"></i> Application</span><span><i class="legend purple"></i> Database</span><span class="hint">Tip: click a component to explore it</span></div>
+        </div>
+
+        <aside class="panel detail-panel">
+          <div class="section-kicker">COMPONENT EXPLORER</div>
+          <div class="component-icon" id="detailIcon">◎</div>
+          <h3 id="detailTitle">Virtual Private Cloud</h3>
+          <p id="detailText">A logically isolated network in AWS where you launch cloud resources.</p>
+          <div class="detail-stat"><span>EXAMPLE CIDR</span><strong id="detailCidr">10.0.0.0/16</strong></div>
+          <div class="detail-stat"><span>WHY IT MATTERS</span><strong id="detailWhy">Network isolation</strong></div>
+          <div class="tip-box"><strong>Production tip</strong><p id="detailTip">Use multiple Availability Zones for resilience. Keep databases in private subnets and restrict access with security groups.</p></div>
+          <button id="nextComponent" class="primary-btn">Explore next component →</button>
+        </aside>
+      </section>
+
+      <section class="lesson-grid">
+        <article class="panel lesson-panel">
+          <div class="panel-head"><div><span class="section-kicker">GUIDED LESSON</span><h3 id="lessonTitle">01. What is a VPC?</h3></div><span class="lesson-count" id="lessonCount">01 / 08</span></div>
+          <p id="lessonBody">Amazon Virtual Private Cloud (Amazon VPC) lets you provision a logically isolated section of the AWS Cloud. You control the IP address range, subnets, route tables, and network gateways.</p>
+          <div class="lesson-callout"><span>✦</span><div><strong>Remember this</strong><p id="lessonRemember">A VPC is your private network boundary inside AWS—not a physical data center.</p></div></div>
+          <div class="lesson-controls"><button id="prevLesson" class="outline-btn" disabled>← Previous</button><div class="progress-track"><div id="progressFill"></div></div><button id="nextLesson" class="primary-btn">Next lesson →</button></div>
+        </article>
+        <article class="panel checklist-panel">
+          <div class="section-kicker">ARCHITECTURE CHECKLIST</div><h3>Before you deploy</h3>
+          <label><input type="checkbox"> Plan a non-overlapping CIDR range</label>
+          <label><input type="checkbox"> Use at least two Availability Zones</label>
+          <label><input type="checkbox"> Keep app and database tiers private</label>
+          <label><input type="checkbox"> Review routes and security group rules</label>
+          <label><input type="checkbox"> Enable logs and monitoring</label>
+          <div class="check-note">This is a learning example. Verify your requirements and costs before deploying real AWS resources.</div>
+        </article>
+      </section>
+
+      <section class="panel code-panel">
+        <div class="panel-head"><div><span class="section-kicker">CLI QUICK REFERENCE</span><h3>Inspect a VPC from AWS CLI</h3></div><button id="copyCode" class="outline-btn">Copy command</button></div>
+        <pre><code id="cliCode">aws ec2 describe-vpcs --query "Vpcs[*].[VpcId,CidrBlock,State]" --output table</code></pre>
+        <p class="code-note">Run this only after configuring AWS CLI credentials and a region. The command reads VPC details; it does not create or change resources.</p>
+      </section>
+      <footer><span>VPC Architecture Visual Lab</span><span>Learning demo · Not an AWS console</span></footer>
+    </main>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
